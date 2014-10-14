@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import org.junit.internal.runners.statements.RunAfters;
 
@@ -22,24 +23,57 @@ public class Scheduler {
 			
 		
 	}
+	
+	public void runAlg2(){
+		for(int i = 0; i < machines.length; i++){
+			machines[i] = 0;
+		}		
+		
+		for(int j= 0; j < jobs.length; j++){
+			if(Math.random()< 0.5 )
+				greedyChoice(j);
+			else
+				notSoGreedyChoice(j);
+		}
+	}
 
 	public void runAlg1() {
 		for(int i = 0; i < machines.length; i++){
 			machines[i] = 0;
-		}
-		
+		}		
 		
 		for(int j= 0; j < jobs.length; j++){
-			int index = -1;
-			int finish = Integer.MAX_VALUE;
-			for(int m = 0; m < machines.length; m++){
-				if(machines[m] < finish){
-					index = m;
-					finish = machines[m];
-				}
-			}			
-			machines[index] += jobs[j];
+			greedyChoice(j);
 		}
+	}
+
+	private void greedyChoice(int j) {
+		int index = -1;
+		int finish = Integer.MAX_VALUE;
+		for(int m = 0; m < machines.length; m++){
+			if(machines[m] < finish){
+				index = m;
+				finish = machines[m];
+			}
+		}			
+		machines[index] += jobs[j];
+	}
+	
+	private void notSoGreedyChoice(int j){
+		int index = -1;
+		int finish = Integer.MAX_VALUE;
+		for(int m = 0; m < machines.length; m++){
+			if(machines[m] < finish && ((machines[m]/5)%2)!=0){
+				index = m;
+				finish = machines[m];
+			}
+		}		
+		if(index == -1){
+			greedyChoice(j);
+			return;
+		}
+		
+		machines[index] += jobs[j];
 	}
 	
 	public int latestFinish(){
@@ -73,7 +107,7 @@ public class Scheduler {
 
 	public static void main(String[] args){
 		Scheduler s = new Scheduler(args[0]);
-		s.runAlg1();
+		s.runAlg2();
 		s.printMachines();
 		System.out.println(s.latestFinish());
 	}
