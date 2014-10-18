@@ -30,10 +30,10 @@ public class Scheduler {
 		}		
 		
 		for(int j= 0; j < jobs.length; j++){
-			if(Math.random()< 0.5 )
-				greedyChoice(j);
-			else
+			if(jobs[j] == 5 && Math.random()< 0.5 )
 				notSoGreedyChoice(j);
+			else
+				greedyChoice(j);
 		}
 	}
 
